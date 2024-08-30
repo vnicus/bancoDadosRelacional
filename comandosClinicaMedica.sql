@@ -40,6 +40,8 @@ FROM medicos m INNER JOIN atendimentos a
 ON (m.id_medico = a.id_medico)
 ORDER BY data_a; # 'ORDER BY' = "ordenar por', nesse caso vai ordenar pela a data, sempre a ultima clausa desse comodo
 
+
+
 SELECT p.id_paciente "Código Paciente", p.nome, p.sexo, DATE_FORMAT(a.data_a, "%d/%m/%Y") "Data_Consulta", 
 a.horario_a "Horario_Consulta"
 FROM pacientes p INNER JOIN atendimentos a
