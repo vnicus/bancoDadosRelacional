@@ -17,7 +17,7 @@ WHERE id_especialidade = 1;
 
 
 ### ineer join = junção ###
--- 
+-- serve para exibir duas tabelas atraves das chaves estrangeiras
 
 
 SELECT *
@@ -49,4 +49,47 @@ ON (p.id_paciente = a.id_paciente)
 ORDER BY data_a;
 
 
+-- Exercicio 3 
+SELECT m.id_medico "Código Médico", m.nome "Nome Médico",  m.sexo, e.descritivo "Especialidade do Médico", DATE_FORMAT(a.data_a, "%d/%m/%Y") "Data Consulta", p.nome "Atendimento"
+FROM atendimentos a INNER JOIN medicos m
+ON (a.id_medico = m.id_medico) 
+INNER JOIN especialidades e 
+ON (m.id_especialidade = e.id_especialidade) 
+INNER JOIN pacientes p 
+ON (p.id_paciente = a.id_paciente)
+WHERE m.sexo = "F"
+ORDER BY m.nome;
 
+-- Exercicio 4                 o 'format' fez formatação da exbição, invertendo o formato americano para o nosso brasileiro
+SELECT e.id_exame "Codigo", e.descritivo, FORMAT(e.valor, 2, "de_DE") "Valor", 
+r.id_realizae, DATE_FORMAT(r.data_e, "%d/%m/%y") "Data_Exame", p.nome "Nome Paciente"
+FROM realiza_exames r INNER JOIN exames e
+ON (r.id_exame = e.id_exame) INNER JOIN pacientes p ON (r.id_paciente = p.id_paciente)
+ORDER BY e.descritivo DESC; -- 'DESC' inverte a order de Z-A ao inves de A-Z
+
+
+-- Exercicio 6
+# Usando o 'LEFT JOIN' para exibir medicos que não fizeram nenhum atendimento
+SELECT m.id_medico "Código do Médico", m.nome "Nome Médico", DATE_FORMAT(m.data_nasc, "%d/%m/%Y") "Data_nasc", e.descritivo
+FROM medicos m LEFT JOIN atendimentos a # 'LEFT JOIN' exibi todos os campos da tabelas até mesmo aquelas que não tem associação
+ON (m.id_medico = a.id_medico) 
+INNER JOIN especialidades e
+ON (e.id_especialidade = m.id_especialidade)
+WHERE a.id_medico IS NULL
+ORDER BY m.data_nasc;
+
+-- Exercicio 7
+SELECT m.id_medico "Código Médico", m.nome, m.sexo, e.descritivo
+FROM medicos m LEFT JOIN atendimentos a
+ON (m.id_medico = a.id_medico)
+INNER JOIN especialidades e
+ON (e.id_especialidade = m.id_especialidade)
+WHERE a.id_medico IS NULL AND m.sexo = "M" 
+ORDER BY m.id_medico;
+
+-- 
+SELECT p.id_paciente "Código Cliente", p.nome, p.sexo
+FROM pacientes p LEFT JOIN atendimentos a
+ON (p.id_paciente = a.id_paciente)
+WHERE a.id_paciente IS NULL
+ORDER BY p.id_paciente;
