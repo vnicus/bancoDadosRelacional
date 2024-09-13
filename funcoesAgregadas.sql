@@ -126,3 +126,50 @@ FROM matriculas m INNER JOIN disciplinas d
 ON (m.id_disciplina = d.id_disciplina) INNER JOIN cursos c 
 ON (c.id_curso = d.id_curso)
 GROUP BY c.id_curso; -- 'Group By', faz o desagrupamento por id dos cursos
+
+
+### 13-09-2024 ###
+
+# Ex1 - calcular o num de alunos do sexo F em cada curso. Classificar a lista em ordem Alfabetica
+
+SELECT c.id_curso "Codigo", c.descritivo "Curso", COUNT(a.id_aluno) "N_Alunos"
+FROM alunos a INNER JOIN cursos c
+ON (a.id_curso = c.id_curso)
+WHERE a.sexo = "F"
+GROUP BY c.id_curso
+HAVING N_Alunos >= 6 -- 'Having' usado para exibir com uma condição o 'Count'
+ORDER BY c.descritivo;
+
+# Ex2 - calcular o num de disciplnas ministradas por cada professor. 
+# classificar listagem em ordem alfabetica pelo o nome do professor
+
+SELECT p.id_professor "Codigo Professor", p.nome "Nome Professor", c.descritivo, COUNT(d.id_disciplina) "Nro_disciplinas"
+FROM disciplinas d INNER JOIN professores p
+ON (d.id_professor = p.id_professor) INNER JOIN cursos c
+ON (p.id_curso = c.id_curso)
+GROUP BY p.id_professor
+ORDER BY p.nome;
+
+# Ex3 - calcular o num de alunos matriculados em cada disciplina, classificar por id da disciplina
+
+SELECT d.id_disciplina "Código disciplina", d.descritivo "Nome Curso", COUNT(m.id_disciplina) "Nro_alunos"
+FROM matriculas m INNER JOIN alunos a
+ON (m.id_aluno = a.id_aluno) INNER JOIN disciplinas d
+ON (m.id_disciplina = d.id_disciplina)
+GROUP BY  d.id_disciplina
+ORDER BY d.id_disciplina;
+
+#ex4 - Calcular a mensalidade que cada aluno paga pelas as disciplinas cursadas
+# classificar a listagem pelo o nome
+
+SELECT a.id_aluno "Código Aluno", a.nome "Nome do Aluno", c.descritivo "Nome Curso", 
+CONCAT( "R$ ", FORMAT(SUM(d.valor), 2, "de_DE")) "Valor", COUNT(m.id_aluno)
+FROM matriculas m INNER JOIN disciplinas d
+ON (m
+.id_disciplina = d.id_disciplina) INNER JOIN alunos a
+ON (m.id_aluno = a.id_aluno) INNER JOIN cursos c
+ON (a.id_curso = c.id_curso)
+GROUP BY a.id_aluno
+ORDER BY a.nome;
+
+
